@@ -35,8 +35,17 @@ def hyperlink(url, numWords):
     pyautogui.press('tab')
     pyautogui.press('enter')
 
+def tab():
+    pyautogui.press('tab')
+
+def enter():
+    pyautogui.press('enter')
+
 senderEmail = input("enter email: ")
-senderPassword = getpass("enter password: ")
+senderPassword = input("enter password: ")
+emailFilePath = "fwp/sent-email-list.txt"
+contactFilePath = "fwp/contact-added-list.txt"
+inX = 1000
 
 browser = webdriver.Chrome()
 browser.implicitly_wait(5)
@@ -77,14 +86,14 @@ for card in contactCards:
 
 sentEmails = set()
 companiesAdded = set()
-emailFileRead = open("sent-email-list.txt", "r")
+emailFileRead = open(emailFilePath, "r")
 while True:
     currContact = emailFileRead.readline().strip()
     if(currContact == ""):
         break
     sentEmails.add(currContact)
 emailFileRead.close()
-contactFileRead = open("contact-added-list.txt", "r")
+contactFileRead = open(contactFilePath, "r")
 while True:
     currContact = contactFileRead.readline().strip()
     if(currContact == ""):
@@ -94,14 +103,15 @@ contactFileRead.close()
 
 
 context = ssl.create_default_context()
-with open("sent-email-list.txt", "a") as emailFile:
-    with open("contact-added-list.txt", "a") as contactFile:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
+with open(emailFilePath, "a") as emailFile:
+    with open(contactFilePath, "a") as contactFile:
+        with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
             smtp.ehlo()
+            smtp.starttls()
             smtp.login(senderEmail, senderPassword)
             pyautogui.alert("switch to hubspot tab to begin program")
             time.sleep(1)
-            pyautogui.click(2693, 302)
+            pyautogui.click(clicks=2, x=1327, y=197)
             for contact in contactList:
                 if(contact.company in companiesAdded):
                     print(f"{contact.company} is already a contact")
@@ -109,49 +119,65 @@ with open("sent-email-list.txt", "a") as emailFile:
                 contactFile.write(f"{contact.company}\n")
                 companiesAdded.add(contact.company)
                 time.sleep(2.2)
-                pyautogui.click(1983, 436)
+                pyautogui.click(clicks=2, x=inX, y=269)
                 pyautogui.write(contact.email)
-                pyautogui.press('tab')
+                tab()
                 pyautogui.write(contact.firstName)
-                pyautogui.press('tab')
+                tab()
                 pyautogui.write(contact.lastName)
                 conf = pyautogui.confirm("Add contact?", "Check", ["Yes", "No"])
                 if(conf == "No"):
-                    pyautogui.click(2827, 203)
+                    pyautogui.click(clicks=2, x=1405, y=146)
                     time.sleep(1.5)
-                    pyautogui.click(2693, 302)
+                    pyautogui.click(1327, 197)
                     continue
-                pyautogui.click(1938, 900)
+                pyautogui.click(clicks=2, x=inX, y=536)
                 pyautogui.write(contact.position)
-                pyautogui.press('tab')
+                tab()
                 pyautogui.write(contact.company)
-                pyautogui.press('tab')
+                tab()
+                # City
                 pyautogui.write("n/a")
-                pyautogui.click(1952, 1355)
+                tab()
+                enter()
+                # State
                 pyautogui.write("n/a")
-                pyautogui.press('enter')
-                pyautogui.click(1968, 1502)
+                enter()
+                tab()
+                enter()
+                # Country
                 pyautogui.write("n/a")
-                pyautogui.press('enter')
-                pyautogui.moveTo(2266, 963)
-                pyautogui.scroll(-2000)
-                pyautogui.click(2013, 576)
+                enter()
+                # pyautogui.moveTo(1133, 481)
+                # pyautogui.scroll(-2000)
+                tab()
+                tab()
+                enter()
+                # Industry
                 pyautogui.write("technology")
-                pyautogui.press("enter")
-                pyautogui.click(1996, 722)
+                enter()
+                tab()
+                enter()
+                # Sub-Industry
                 pyautogui.write("fixed wireless")
-                pyautogui.press("enter")
-                pyautogui.click(2376, 196)
-                pyautogui.click(1991, 857)
+                enter()
+                pyautogui.press('esc')
+                tab()
+                tab()
+                enter()
+                # Project
                 pyautogui.write("n/a")
-                pyautogui.press("enter")
-                pyautogui.click(2376, 196)
-                pyautogui.click(1999, 1011)
+                enter()
+                pyautogui.press('esc')
+                tab()
+                tab()
+                enter()
+                # Managing Director Initiative
                 pyautogui.write("tech practice")
-                pyautogui.press("enter")
-                pyautogui.click(2376, 196)
+                enter()
+                pyautogui.press('esc')
                 time.sleep(0.5)
-                pyautogui.moveTo(2276, 1646)
+                pyautogui.moveTo(1082, 799)
                 time.sleep(0.4)
                 pyautogui.click()
                 if(contact.email in sentEmails):
@@ -197,7 +223,7 @@ with open("sent-email-list.txt", "a") as emailFile:
                 msg['To'] = recipient
                 msg['Subject'] = subject
                 msg.attach(MIMEText(html_content, 'html'))
-                with open("sellside-logo.jpg", 'rb') as img:
+                with open("fwp/sellside-logo.jpg", 'rb') as img:
                     mime_img = MIMEImage(img.read())
                     mime_img.add_header('Content-ID', '<image1>')
                     msg.attach(mime_img)
