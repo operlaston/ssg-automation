@@ -116,7 +116,7 @@ with open(emailFilePath, "a") as emailFile:
                 if(contact.company in companiesAdded):
                     print(f"{contact.company} is already a contact")
                     continue
-                contactFile.write(f"{contact.company}\n")
+                
                 companiesAdded.add(contact.company)
                 time.sleep(2.2)
                 pyautogui.click(clicks=2, x=inX, y=269)
@@ -132,7 +132,9 @@ with open(emailFilePath, "a") as emailFile:
                     pyautogui.click(clicks=2, x=1405, y=146)
                     time.sleep(1.5)
                     pyautogui.click(1327, 197)
+                    contactFile.write(f"{contact.company}\n")
                     continue
+                contactFile.write(f"{contact.company}\n")
                 pyautogui.click(clicks=2, x=inX, y=536)
                 pyautogui.write(contact.position)
                 tab()
@@ -186,10 +188,10 @@ with open(emailFilePath, "a") as emailFile:
                     print(f"{contact.email} has already been sent an email")
                     continue
                 # emailConfirm = pyautogui.confirm(f"Send email to {contact.firstName} {contact.lastName} at {contact.company}? ({contact.email})", "Email Confirmation", ["Yes", "No"])
-                emailConfirm = input(f"Send email to {contact.firstName} {contact.lastName} at {contact.company}? ({contact.email})\n")
-                emailConfirm = emailConfirm.strip().lower()
-                if(not (emailConfirm == 'y' or emailConfirm == 'yes')):
-                    continue
+                # emailConfirm = input(f"Send email to {contact.firstName} {contact.lastName} at {contact.company}? ({contact.email})\n")
+                # emailConfirm = emailConfirm.strip().lower()
+                # if(not (emailConfirm == 'y' or emailConfirm == 'yes')):
+                #     continue
                 recipient = contact.email
                 subjectLine = "Subject: Investment Opportunity - " + contact.company + "\n"
                 subject = "Investment Opportunity - " + contact.company
@@ -233,6 +235,7 @@ with open(emailFilePath, "a") as emailFile:
                     msg.attach(mime_img)
                 emailFile.write(f"{contact.email}\n")
                 smtp.sendmail(senderEmail, recipient, msg.as_string())
+                print(f"Email sent to {contact.email}")
 
 pyautogui.alert("program finished successfully")
 
