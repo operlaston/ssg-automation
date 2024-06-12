@@ -44,7 +44,7 @@ def enter():
     pyautogui.press('enter')
 
 senderEmail = input("enter email: ")
-senderPassword = getpass("enter password: ")
+senderPassword = input("enter password: ")
 emailFilePath = "royal/sent-email-list.txt"
 contactFilePath = "royal/contact-added-list.txt"
 inX = 1000
