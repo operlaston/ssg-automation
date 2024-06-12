@@ -128,8 +128,10 @@ with open(emailFilePath, "a") as emailFile:
                 pyautogui.write(contact.firstName)
                 tab()
                 pyautogui.write(contact.lastName)
-                conf = pyautogui.confirm("Add contact?", "Check", ["Yes", "No"])
-                if(conf == "No"):
+                # conf = pyautogui.confirm("Add contact?", "Check", ["Yes", "No"])
+                conf = input("Add contact?\n")
+                conf = conf.strip().lower()
+                if(not (conf == 'y' or conf == 'yes')):
                     pyautogui.click(clicks=2, x=1405, y=146)
                     time.sleep(1.5)
                     pyautogui.click(1327, 197)
@@ -179,8 +181,10 @@ with open(emailFilePath, "a") as emailFile:
                 if(contact.email in sentEmails):
                     print(f"{contact.email} has already been sent an email")
                     continue
-                emailConfirm = pyautogui.confirm(f"Send email to {contact.firstName} {contact.lastName} at {contact.company}? ({contact.email})", "Email Confirmation", ["Yes", "No"])
-                if(emailConfirm == "No"):
+                # emailConfirm = pyautogui.confirm(f"Send email to {contact.firstName} {contact.lastName} at {contact.company}? ({contact.email})", "Email Confirmation", ["Yes", "No"])
+                emailConfirm = input(f"Send email to {contact.firstName} {contact.lastName} at {contact.company}? ({contact.email})\n")
+                emailConfirm = emailConfirm.strip().lower()
+                if(not (emailConfirm == 'y' or emailConfirm == 'yes')):
                     continue
                 recipient = contact.email
                 # subjectLine = "Subject: Interested Buyer for " + contact.company + "\n"
