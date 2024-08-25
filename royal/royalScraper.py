@@ -106,8 +106,8 @@ contactFileRead.close()
 
 
 context = ssl.create_default_context()
-with open(emailFilePath, "a") as emailFile:
-    with open(contactFilePath, "a") as contactFile:
+with open(emailFilePath, "a", buffering=1) as emailFile:
+    with open(contactFilePath, "a", buffering=1) as contactFile:
         with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
             smtp.ehlo()
             smtp.starttls()
@@ -119,7 +119,7 @@ with open(emailFilePath, "a") as emailFile:
                 if(contact.company in companiesAdded):
                     print(f"{contact.company} is already a contact")
                     continue
-                
+                contactFile.write(f"{contact.company}\n")
                 companiesAdded.add(contact.company)
                 time.sleep(2.2)
                 pyautogui.click(clicks=2, x=inX, y=269)
@@ -135,9 +135,7 @@ with open(emailFilePath, "a") as emailFile:
                     pyautogui.click(clicks=2, x=1405, y=146)
                     time.sleep(1.5)
                     pyautogui.click(1327, 197)
-                    contactFile.write(f"{contact.company}\n")
                     continue
-                contactFile.write(f"{contact.company}\n")
                 pyautogui.click(clicks=2, x=inX, y=536)
                 pyautogui.write(contact.position)
                 tab()
